@@ -13,8 +13,12 @@ import { Setup } from '@/pages/Setup'
 function AppRoutes() {
   const { session } = useAuth()
 
-  // undefined = Supabase vérifie encore la session → écran blanc le temps du check
-  if (session === undefined) return null
+  // undefined = Supabase vérifie encore la session → spinner minimal
+  if (session === undefined) return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
+      <p className="text-sm text-gray-400">Chargement...</p>
+    </div>
+  )
 
   // null = non connecté → page de connexion
   if (session === null) return <Auth />
