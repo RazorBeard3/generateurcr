@@ -1,0 +1,9 @@
+# Dépendances Python pour la transcription Whisper
+# Installation : pip install -r requirements.txt
+
+openai-whisper>=20240930
+# PyTorch sera installé automatiquement via openai-whisper
+# ffmpeg doit être installé séparément sur le système :
+# - macOS : brew install ffmpeg
+# - Ubuntu : sudo apt install ffmpeg
+# - Windows : https://ffmpeg.org/download.html

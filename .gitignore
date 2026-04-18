@@ -1,0 +1,27 @@
+# Dépendances
+node_modules/
+**/node_modules/
+
+# Variables d'environnement (contiennent les clés API)
+.env
+**/.env
+!**/.env.example
+
+# Fichiers audio uploadés
+backend/uploads/
+
+# Données locales
+backend/data/
+
+# Build frontend
+frontend/dist/
+
+# Tauri build
+frontend/src-tauri/target/
+
+# Logs
+*.log
+/tmp/
+
+# macOS
+.DS_Store
