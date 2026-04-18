@@ -83,6 +83,7 @@ export function NewCR() {
   const [saveForm, setSaveForm] = useState({ title: '', projectId: '' })
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [saveError, setSaveError] = useState('')
   const [savedCR, setSavedCR] = useState(null)
   const [shareOpen, setShareOpen] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -139,6 +140,7 @@ export function NewCR() {
   async function handleSave() {
     if (!saveForm.title.trim()) return
     setSaving(true)
+    setSaveError('')
     try {
       const project = projects.find(p => p.id === saveForm.projectId)
       const cr = await crsApi.create({
@@ -155,7 +157,7 @@ export function NewCR() {
       setSavedCR(cr)
       setSaved(true)
     } catch (err) {
-      // affiché dans le formulaire
+      setSaveError(err.message || 'La sauvegarde a échoué. Réessayez.')
     } finally {
       setSaving(false)
     }
@@ -534,6 +536,12 @@ export function NewCR() {
                   onChange={e => setSaveForm(f => ({ ...f, projectId: e.target.value }))}
                   hint="Vous pouvez créer de nouveaux projets dans l'onglet Projets."
                 />
+                {saveError && (
+                  <div className="flex items-start gap-3 rounded-lg bg-destructive/10 border border-destructive/20 p-3">
+                    <AlertCircle className="h-4 w-4 text-destructive mt-0.5 shrink-0" />
+                    <p className="text-sm text-destructive">{saveError}</p>
+                  </div>
+                )}
                 <Button
                   onClick={handleSave}
                   loading={saving}

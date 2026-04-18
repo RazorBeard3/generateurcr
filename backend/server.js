@@ -78,11 +78,15 @@ app.use(express.json({ limit: '50mb' }))
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 // Routes API
+// Publiques (sans auth) : GET /api/health, GET /api/setup/check
+// Protégées (avec auth)  : /api/transcribe, /api/generate-cr, /api/crs, /api/projects
+const authMiddleware = require('./src/middleware/auth')
+app.use('/api/setup', require('./src/routes/setup'))
+app.use('/api', authMiddleware)
 app.use('/api', require('./src/routes/transcribe'))
 app.use('/api', require('./src/routes/generate'))
 app.use('/api', require('./src/routes/crs'))
 app.use('/api', require('./src/routes/projects'))
-app.use('/api', require('./src/routes/setup'))
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })

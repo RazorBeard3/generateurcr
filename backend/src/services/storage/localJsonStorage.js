@@ -17,7 +17,7 @@ function writeFile(filePath, data) {
 
 // --- CRs ---
 
-// listCRs({ projectId?, search? }) → CR[]
+// listCRs({ projectId?, search?, userId? }) → CR[]  (userId ignoré en local)
 function listCRs({ projectId, search } = {}) {
   let crs = readFile(crsPath)
   if (projectId) crs = crs.filter(c => c.projectId === projectId)
@@ -31,12 +31,12 @@ function listCRs({ projectId, search } = {}) {
   return crs
 }
 
-// getCR(id) → CR | null
+// getCR(id, userId?) → CR | null  (userId ignoré en local)
 function getCR(id) {
   return readFile(crsPath).find(c => c.id === id) || null
 }
 
-// createCR(data) → CR  (id et createdAt ajoutés automatiquement)
+// createCR(data, userId?) → CR  (userId ignoré en local)
 function createCR(data) {
   const crs = readFile(crsPath)
   const newCR = { id: uuidv4(), createdAt: new Date().toISOString(), ...data }
@@ -45,7 +45,7 @@ function createCR(data) {
   return newCR
 }
 
-// updateCR(id, data) → CR mis à jour | null si introuvable
+// updateCR(id, data, userId?) → CR mis à jour | null si introuvable  (userId ignoré en local)
 function updateCR(id, data) {
   const crs = readFile(crsPath)
   const idx = crs.findIndex(c => c.id === id)
@@ -55,19 +55,19 @@ function updateCR(id, data) {
   return crs[idx]
 }
 
-// deleteCR(id) → void
+// deleteCR(id, userId?) → void  (userId ignoré en local)
 function deleteCR(id) {
   writeFile(crsPath, readFile(crsPath).filter(c => c.id !== id))
 }
 
 // --- Projets ---
 
-// listProjects() → Project[]
+// listProjects(userId?) → Project[]  (userId ignoré en local)
 function listProjects() {
   return readFile(projectsPath)
 }
 
-// createProject(data) → Project  (id, color et createdAt ajoutés automatiquement)
+// createProject(data, userId?) → Project  (userId ignoré en local)
 function createProject(data) {
   const projects = readFile(projectsPath)
   const usedColors = projects.map(p => p.color)
@@ -78,7 +78,7 @@ function createProject(data) {
   return newProject
 }
 
-// updateProject(id, data) → Project mis à jour | null si introuvable
+// updateProject(id, data, userId?) → Project mis à jour | null si introuvable  (userId ignoré en local)
 function updateProject(id, data) {
   const projects = readFile(projectsPath)
   const idx = projects.findIndex(p => p.id === id)
@@ -88,7 +88,7 @@ function updateProject(id, data) {
   return projects[idx]
 }
 
-// deleteProject(id) → void
+// deleteProject(id, userId?) → void  (userId ignoré en local)
 function deleteProject(id) {
   writeFile(projectsPath, readFile(projectsPath).filter(p => p.id !== id))
 }

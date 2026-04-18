@@ -7,8 +7,23 @@ const BASE = import.meta.env.VITE_API_URL
     ? '/api'
     : 'http://localhost:3001/api'
 
+// Récupère le token JWT de la session Supabase courante
+async function getAuthHeaders() {
+  try {
+    // Import dynamique pour éviter la circularité si supabase n'est pas encore init
+    const { supabase } = await import('./supabase')
+    const { data: { session } } = await supabase.auth.getSession()
+    if (session?.access_token) return { 'Authorization': `Bearer ${session.access_token}` }
+  } catch {}
+  return {}
+}
+
 async function request(path, options = {}) {
-  const res = await fetch(`${BASE}${path}`, options)
+  const authHeaders = await getAuthHeaders()
+  const res = await fetch(`${BASE}${path}`, {
+    ...options,
+    headers: { ...authHeaders, ...options.headers },
+  })
   const data = await res.json().catch(() => ({}))
   if (!res.ok) {
     throw new Error(data.error || data.message || `Erreur ${res.status}`)
@@ -18,9 +33,10 @@ async function request(path, options = {}) {
 
 // Transcription audio
 export async function transcribeAudio(audioBlob, filename = 'recording.webm') {
+  const authHeaders = await getAuthHeaders()
   const formData = new FormData()
   formData.append('audio', audioBlob, filename)
-  const res = await fetch(`${BASE}/transcribe`, { method: 'POST', body: formData })
+  const res = await fetch(`${BASE}/transcribe`, { method: 'POST', headers: authHeaders, body: formData })
   const data = await res.json().catch(() => ({}))
   if (!res.ok) throw new Error(data.error || 'Échec de la transcription')
   return data

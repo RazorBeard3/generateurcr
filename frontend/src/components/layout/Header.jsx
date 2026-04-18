@@ -1,9 +1,11 @@
-import { Moon, Sun, Menu, Bell } from 'lucide-react'
+import { Moon, Sun, Menu, LogOut } from 'lucide-react'
 import { useTheme } from '@/context/ThemeContext'
+import { useAuth } from '@/context/AuthContext'
 import { Button } from '@/components/ui/Button'
 
 export function Header({ onMenuClick, title }) {
   const { theme, toggle } = useTheme()
+  const { logout } = useAuth()
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 lg:px-6">
@@ -33,6 +35,10 @@ export function Header({ onMenuClick, title }) {
             ? <Sun className="h-4 w-4" />
             : <Moon className="h-4 w-4" />
           }
+        </Button>
+        {/* Déconnexion */}
+        <Button variant="ghost" size="icon" onClick={logout} title="Se déconnecter">
+          <LogOut className="h-4 w-4" />
         </Button>
       </div>
     </header>

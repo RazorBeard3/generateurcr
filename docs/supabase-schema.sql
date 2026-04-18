@@ -16,6 +16,7 @@ create table if not exists crs (
   "meetingType" text,
   transcription text,
   config        jsonb,
+  "projectColor" text,
   "audioPath"   text,
   duration      text,
   "createdAt"   timestamptz default now(),
