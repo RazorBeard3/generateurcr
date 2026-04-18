@@ -3,9 +3,9 @@ import { Upload, FileAudio, X, CheckCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from './ui/Button'
 
-const ACCEPTED = ['.mp3', '.mp4', '.m4a', '.wav', '.ogg', '.webm', '.flac', '.aac']
-// Extensions + MIME explicites pour compatibilité iOS Safari et Android
-const ACCEPTED_MIME = '.mp3,.mp4,.m4a,.wav,.ogg,.webm,.flac,.aac,audio/mpeg,audio/mp4,audio/x-m4a,audio/wav,audio/ogg,audio/aac,audio/flac,audio/webm,audio/*,video/mp4'
+const ACCEPTED = ['.mp3', '.mp4', '.m4a', '.wav', '.ogg', '.webm', '.flac', '.aac', '.mov']
+// Extensions uniquement — iOS Safari grise les fichiers audio si on mélange audio/* et video/mp4
+const ACCEPTED_MIME = '.mp3,.wav,.m4a,.aac,.ogg,.flac,.mp4,.mov,.webm'
 const MAX_SIZE_MB = 500
 
 export function AudioUploader({ onFileReady }) {
@@ -23,8 +23,9 @@ export function AudioUploader({ onFileReady }) {
     }
 
     const ext = '.' + f.name.split('.').pop().toLowerCase()
-    if (!ACCEPTED.includes(ext) && !f.type.startsWith('audio/') && f.type !== 'video/mp4') {
-      setError(`Format non supporté. Formats acceptés : ${ACCEPTED.join(', ')}`)
+    const mimeOk = f.type.startsWith('audio/') || ['video/mp4', 'video/quicktime', 'video/webm'].includes(f.type)
+    if (!ACCEPTED.includes(ext) && !mimeOk) {
+      setError(`Format non supporté (${f.type || ext}). Formats acceptés : ${ACCEPTED.join(', ')}`)
       return
     }
 
