@@ -4,7 +4,8 @@ import { cn } from '@/lib/utils'
 import { Button } from './ui/Button'
 
 const ACCEPTED = ['.mp3', '.mp4', '.m4a', '.wav', '.ogg', '.webm', '.flac', '.aac']
-const ACCEPTED_MIME = 'audio/*,video/mp4'
+// Extensions + MIME explicites pour compatibilité iOS Safari et Android
+const ACCEPTED_MIME = '.mp3,.mp4,.m4a,.wav,.ogg,.webm,.flac,.aac,audio/mpeg,audio/mp4,audio/x-m4a,audio/wav,audio/ogg,audio/aac,audio/flac,audio/webm,audio/*,video/mp4'
 const MAX_SIZE_MB = 500
 
 export function AudioUploader({ onFileReady }) {
