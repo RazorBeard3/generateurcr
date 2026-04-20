@@ -1,9 +1,11 @@
 const express = require('express')
-const { generateReport } = require('../services/reporting')
+const { generateReport } = require('../services/reporting/hostedReportService')
+const { generateLimiter } = require('../middleware/rateLimiter')
+const { sendServerError } = require('../middleware/errors')
 
 const router = express.Router()
 
-router.post('/generate-cr', async (req, res) => {
+router.post('/generate-cr', generateLimiter, async (req, res) => {
   const { transcription, config } = req.body
 
   if (!transcription || transcription.trim().length < 10) {
@@ -15,8 +17,7 @@ router.post('/generate-cr', async (req, res) => {
     // cr: alias de markdown pour la compatibilité frontend
     res.json({ cr: markdown, mode, structured, markdown })
   } catch (err) {
-    console.error('Erreur génération CR :', err.message)
-    res.status(500).json({ error: `La génération a échoué : ${err.message}` })
+    sendServerError(res, err, 'generateCR')
   }
 })
 
