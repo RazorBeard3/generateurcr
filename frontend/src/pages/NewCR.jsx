@@ -15,6 +15,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/Tabs'
 import { Badge } from '@/components/ui/Badge'
 import { Progress, Spinner } from '@/components/ui/Progress'
 import { ShareModal } from '@/components/ShareModal'
+import BillyMascot from '@/components/BillyMascot'
 import { transcribeAudio, generateCR, crsApi } from '@/lib/api'
 import { cn, downloadFile, stripMarkdown } from '@/lib/utils'
 
@@ -279,11 +280,11 @@ export function NewCR() {
           <CardContent className="space-y-4">
             {transcribing && (
               <div className="flex flex-col items-center justify-center py-12 gap-4">
-                <Spinner size="xl" />
+                <BillyMascot state="listening" size={100} />
                 <div className="text-center">
-                  <p className="font-medium">Transcription en cours…</p>
+                  <p className="font-medium">J'écoute tout ça…</p>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Whisper medium traite votre audio. Cela peut prendre 1 à 2 minutes.
+                    AssemblyAI traite votre audio. Cela peut prendre 1 à 2 minutes.
                   </p>
                 </div>
               </div>
@@ -433,9 +434,9 @@ export function NewCR() {
           <CardContent className="space-y-4">
             {generating && (
               <div className="flex flex-col items-center justify-center py-12 gap-4">
-                <Spinner size="xl" />
+                <BillyMascot state="writing" size={100} />
                 <div className="text-center">
-                  <p className="font-medium">Génération en cours…</p>
+                  <p className="font-medium">Je structure ça pour toi…</p>
                   <p className="text-sm text-muted-foreground mt-1">
                     Claude rédige votre compte rendu. Cela prend généralement 15 à 30 secondes.
                   </p>
@@ -557,9 +558,7 @@ export function NewCR() {
           ) : (
             <Card className="border-green-200 dark:border-green-800">
               <CardContent className="flex flex-col items-center py-10 gap-4 text-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/40">
-                  <CheckCircle className="h-8 w-8 text-green-600" />
-                </div>
+                <BillyMascot state="done" size={100} />
                 <div>
                   <h3 className="text-lg font-semibold">CR sauvegardé !</h3>
                   <p className="text-sm text-muted-foreground mt-1">{saveForm.title}</p>
